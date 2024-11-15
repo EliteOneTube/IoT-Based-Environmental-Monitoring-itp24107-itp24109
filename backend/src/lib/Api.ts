@@ -41,13 +41,13 @@ export default class Api {
 
         router.use('/docs', swaggerUi.serve, swaggerUi.setup(this.swaggerDocument));
 
-        router.get('/weather', this.authenticateToken, async (req: Request, res: Response) => {
+        router.get('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
             const weatherData = await this.database.getWeatherData();
 
             res.json(weatherData);
         });
 
-        router.post('/weather', this.authenticateToken, async (req: Request, res: Response) => {
+        router.post('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
             const { temperature, humidity, timestamp } = req.body;
 
             await this.database.addWeatherData(temperature, humidity, timestamp);
