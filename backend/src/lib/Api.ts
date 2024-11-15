@@ -39,7 +39,7 @@ export default class Api {
     private mountRoutes(): void {
         const router = express.Router();
 
-        router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(this.swaggerDocument));
+        router.use('/docs', swaggerUi.serve, swaggerUi.setup(this.swaggerDocument));
 
         router.get('/weather', this.authenticateToken, async (req: Request, res: Response) => {
             const weatherData = await this.database.getWeatherData();
