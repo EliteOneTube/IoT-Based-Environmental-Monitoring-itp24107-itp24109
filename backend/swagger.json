@@ -1,0 +1,83 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "IoT-Based Environmental Monitoring API",
+        "description": "API documentation for the IoT-Based Environmental Monitoring system."
+    },
+    "host": "weathernest.mooo.com",
+    "basePath": "/",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/weather": {
+            "get": {
+                "summary": "Get weather data",
+                "description": "Retrieve weather data from the database.",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "temperature": {
+                                        "type": "number"
+                                    },
+                                    "humidity": {
+                                        "type": "number"
+                                    },
+                                    "timestamp": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add weather data",
+                "description": "Add new weather data to the database.",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "temperature": {
+                                    "type": "number"
+                                },
+                                "humidity": {
+                                    "type": "number"
+                                },
+                                "timestamp": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weather data saved",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

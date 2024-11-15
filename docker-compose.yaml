@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "127.0.0.1:${API_PORT}:${API_PORT}"
+    depends_on:
+      - mosquitto
+    networks:
+      - internal
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    volumes:
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_config:/mosquitto/config
+    networks:
+      - internal
+
+volumes:
+  mosquitto_data:
+  mosquitto_config:
+
+networks:
+  internal:
+    driver: bridge
