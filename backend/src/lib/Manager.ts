@@ -16,28 +16,28 @@ export default class Manager {
 
         this.database.connect();
 
-        this.mqtt = new MQTTManager(process.env.MQTT_HOST || 'mqtt://localhost:1883');
+        // this.mqtt = new MQTTManager(process.env.MQTT_HOST || 'mqtt://localhost:1883');
 
-        this.mqtt.subscribe('weathernest');
+        // this.mqtt.subscribe('weathernest');
 
-        this.mqtt.onMessage((topic, message) => {
-            // Parse the message as JSON and check if it has the expected properties
-            let data;
+        // this.mqtt.onMessage((topic, message) => {
+        //     // Parse the message as JSON and check if it has the expected properties
+        //     let data;
 
-            try {
-                data = JSON.parse(message.toString());
-            } catch (error) {
-                console.error('Error parsing message:', error);
-                return;
-            }
+        //     try {
+        //         data = JSON.parse(message.toString());
+        //     } catch (error) {
+        //         console.error('Error parsing message:', error);
+        //         return;
+        //     }
 
-            if (!data.temperature || !data.humidity || !data.timestamp) {
-                console.error('Invalid message:', data);
-                return;
-            }
+        //     if (!data.temperature || !data.humidity || !data.timestamp) {
+        //         console.error('Invalid message:', data);
+        //         return;
+        //     }
 
-            // Add the data to the database
-            this.database.addWeatherData(data.temperature, data.humidity, data.timestamp);
-        });
+        //     // Add the data to the database
+        //     this.database.addWeatherData(data.temperature, data.humidity, data.timestamp);
+        // });
     }
 }

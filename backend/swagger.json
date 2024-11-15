@@ -1,83 +1,136 @@
 {
-    "swagger": "2.0",
+    "openapi": "3.0.0",
     "info": {
-        "version": "1.0.0",
-        "title": "IoT-Based Environmental Monitoring API",
-        "description": "API documentation for the IoT-Based Environmental Monitoring system."
+      "title": "Weather API",
+      "description": "API for managing weather data",
+      "version": "1.0.0"
     },
-    "host": "weathernest.mooo.com",
-    "basePath": "/",
-    "schemes": [
-        "https"
+    "servers": [
+      {
+        "url": "https:weathernest.mooo.com"
+      }
     ],
     "paths": {
-        "/weather": {
-            "get": {
-                "summary": "Get weather data",
-                "description": "Retrieve weather data from the database.",
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "temperature": {
-                                        "type": "number"
-                                    },
-                                    "humidity": {
-                                        "type": "number"
-                                    },
-                                    "timestamp": {
-                                        "type": "string",
-                                        "format": "date-time"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "summary": "Add weather data",
-                "description": "Add new weather data to the database.",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "temperature": {
-                                    "type": "number"
-                                },
-                                "humidity": {
-                                    "type": "number"
-                                },
-                                "timestamp": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Weather data saved",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
+      "/weather": {
+        "get": {
+          "summary": "Get Weather Data",
+          "description": "Retrieve all stored weather data.",
+          "tags": ["Weather"],
+          "security": [
+            {
+              "bearerAuth": []
             }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "temperature": {
+                          "type": "number",
+                          "example": 25.3
+                        },
+                        "humidity": {
+                          "type": "number",
+                          "example": 60
+                        },
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-11-15T12:34:56Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "403": {
+              "description": "Forbidden"
+            }
+          }
+        },
+        "post": {
+          "summary": "Add Weather Data",
+          "description": "Add a new weather data record.",
+          "tags": ["Weather"],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "temperature": {
+                      "type": "number",
+                      "example": 25.3
+                    },
+                    "humidity": {
+                      "type": "number",
+                      "example": 60
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-11-15T12:34:56Z"
+                    }
+                  },
+                  "required": ["temperature", "humidity", "timestamp"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Weather data saved",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Weather data saved"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "403": {
+              "description": "Forbidden"
+            }
+          }
         }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
     }
-}
+  }
+  

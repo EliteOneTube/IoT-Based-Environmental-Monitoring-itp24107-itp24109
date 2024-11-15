@@ -10,7 +10,14 @@ export default class MongoDBManager {
         timestamp: String
     });
 
+    private userSchema = new mongoose.Schema({
+        userId: String,
+        token: String
+    });
+
     private weatherModel = mongoose.model<weather>('Weather', this.weatherSchema);
+
+    private userModel = mongoose.model('User', this.userSchema);
 
     async connect(): Promise<void> {
         try {
@@ -34,5 +41,18 @@ export default class MongoDBManager {
 
     async getWeatherData(): Promise<weather[]> {
         return this.weatherModel.find();
+    }
+
+    async addUser(userId: string, token: string): Promise<void> {
+        const user = new this.userModel({
+            userId,
+            token
+        });
+
+        await user.save();
+    }
+
+    async verifyToken(token: string): Promise<boolean> {
+        return await this.userModel.exists({ token }) ? true : false;
     }
 }
