@@ -39,7 +39,7 @@ export default class Api {
     private mountRoutes(): void {
         const router = express.Router();
 
-        router.use('/docs', swaggerUi.serve);
+        router.use('/api/docs', swaggerUi.serve);
 
         router.get('/docs', swaggerUi.setup(this.swaggerDocument));
 
