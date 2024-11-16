@@ -7,7 +7,7 @@
     },
     "servers": [
       {
-        "url": "https:weathernest.mooo.com"
+        "url": "https:weathernest.mooo.com/api"
       }
     ],
     "paths": {
