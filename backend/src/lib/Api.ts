@@ -41,7 +41,7 @@ export default class Api {
 
         router.use('/api/docs', swaggerUi.serve);
 
-        router.get('/docs', swaggerUi.setup(this.swaggerDocument));
+        router.get('/api/docs', swaggerUi.setup(this.swaggerDocument));
 
         router.get('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
             const weatherData = await this.database.getWeatherData();
