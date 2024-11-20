@@ -22,6 +22,7 @@ export default class Api {
         });
 
         this.express.use(express.json());
+        this.express.use(express.urlencoded({ extended: true }));
     }
 
     private async authenticateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
