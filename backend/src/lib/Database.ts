@@ -19,7 +19,7 @@ export default class MongoDBManager {
 
     private userModel = mongoose.model('User', this.userSchema);
 
-    async connect(): Promise<void> {
+    public async connect(): Promise<void> {
         try {
             await mongoose.connect(this.uri);
 
@@ -29,7 +29,7 @@ export default class MongoDBManager {
         }
     }
 
-    async addWeatherData(temperature: number, humidity: number, timestamp: string): Promise<void> {
+    public async addWeatherData(temperature: number, humidity: number, timestamp: string): Promise<void> {
         const weatherData = new this.weatherModel({
             temperature,
             humidity,
@@ -39,11 +39,11 @@ export default class MongoDBManager {
         await weatherData.save();
     }
 
-    async getWeatherData(): Promise<weather[]> {
+    public async getWeatherData(): Promise<weather[]> {
         return this.weatherModel.find();
     }
 
-    async addUser(userId: string, token: string): Promise<void> {
+    public async addUser(userId: string, token: string): Promise<void> {
         const user = new this.userModel({
             userId,
             token
@@ -52,7 +52,7 @@ export default class MongoDBManager {
         await user.save();
     }
 
-    async verifyToken(token: string): Promise<boolean> {
+    public async verifyToken(token: string): Promise<boolean> {
         return await this.userModel.find({ token }).countDocuments() > 0;
     }
 }
