@@ -48,29 +48,11 @@ export default class Api {
         .post(this.addWeatherData.bind(this))
         .get(this.getWeatherData.bind(this));
 
-        // router.post('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
-        //     console.log(req.body);
-
-        //     const { temperature, humidity, timestamp } = req.body;
-
-        //     await this.database.addWeatherData(temperature, humidity, timestamp);
-
-        //     res.json({
-        //         message: 'Weather data saved'
-        //     });
-        // });
-
-        // router.get('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
-        //     const weatherData = await this.database.getWeatherData();
-
-        //     res.json(weatherData);
-        // });
-
         this.express.use('/', router);
     }
 
     private async addWeatherData(req: Request, res: Response): Promise<void> {
-        console.log(req.body);
+        console.log(req);
         const { temperature, humidity, timestamp } = req.body;
 
         await this.database.addWeatherData(temperature, humidity, timestamp);
