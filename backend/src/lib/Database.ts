@@ -53,6 +53,6 @@ export default class MongoDBManager {
     }
 
     async verifyToken(token: string): Promise<boolean> {
-        return await this.userModel.exists({ token }) ? true : false;
+        return await this.userModel.find({ token }).countDocuments() > 0;
     }
 }
