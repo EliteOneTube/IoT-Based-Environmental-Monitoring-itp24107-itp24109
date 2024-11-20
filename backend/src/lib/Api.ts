@@ -80,6 +80,9 @@ export default class Api {
     }
 
     private async getWeatherData(req: Request, res: Response): Promise<void> {
+        //check method
+        console.log(req.method);
+
         const weatherData = await this.database.getWeatherData();
 
         res.json(weatherData);
