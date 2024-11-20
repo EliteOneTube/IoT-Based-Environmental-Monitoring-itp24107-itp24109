@@ -20,6 +20,8 @@ export default class Api {
         this.express.listen(port, () => {
             console.log(`Server running on port ${port}`);
         });
+
+        this.express.use(express.json());
     }
 
     private async authenticateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
