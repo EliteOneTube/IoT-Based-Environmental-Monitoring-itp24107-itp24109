@@ -43,24 +43,45 @@ export default class Api {
 
         router.use('/swagger', swaggerUi.serve, swaggerUi.setup(this.swaggerDocument));
 
-        router.post('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
-            console.log(req.body);
+        router.route('/weather')
+        .all(this.authenticateToken.bind(this))
+        .post(this.addWeatherData.bind(this))
+        .get(this.getWeatherData.bind(this));
 
-            const { temperature, humidity, timestamp } = req.body;
+        // router.post('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
+        //     console.log(req.body);
 
-            await this.database.addWeatherData(temperature, humidity, timestamp);
+        //     const { temperature, humidity, timestamp } = req.body;
 
-            res.json({
-                message: 'Weather data saved'
-            });
-        });
+        //     await this.database.addWeatherData(temperature, humidity, timestamp);
 
-        router.get('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
-            const weatherData = await this.database.getWeatherData();
+        //     res.json({
+        //         message: 'Weather data saved'
+        //     });
+        // });
 
-            res.json(weatherData);
-        });
+        // router.get('/weather', this.authenticateToken.bind(this), async (req: Request, res: Response) => {
+        //     const weatherData = await this.database.getWeatherData();
+
+        //     res.json(weatherData);
+        // });
 
         this.express.use('/', router);
+    }
+
+    private async addWeatherData(req: Request, res: Response): Promise<void> {
+        const { temperature, humidity, timestamp } = req.body;
+
+        await this.database.addWeatherData(temperature, humidity, timestamp);
+
+        res.json({
+            message: 'Weather data saved'
+        });
+    }
+
+    private async getWeatherData(req: Request, res: Response): Promise<void> {
+        const weatherData = await this.database.getWeatherData();
+
+        res.json(weatherData);
     }
 }
