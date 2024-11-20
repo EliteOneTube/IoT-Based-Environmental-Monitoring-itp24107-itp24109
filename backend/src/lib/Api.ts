@@ -20,9 +20,6 @@ export default class Api {
         this.express.listen(port, () => {
             console.log(`Server running on port ${port}`);
         });
-
-        this.express.use(express.json());
-        this.express.use(express.urlencoded({ extended: true }));
     }
 
     private async authenticateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -42,6 +39,9 @@ export default class Api {
     }
 
     private mountRoutes(): void {
+        this.express.use(express.json());
+        this.express.use(express.urlencoded({ extended: true }));
+
         const router = express.Router();
 
         router.use('/swagger', swaggerUi.serve, swaggerUi.setup(this.swaggerDocument));
