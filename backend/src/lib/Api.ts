@@ -70,6 +70,7 @@ export default class Api {
     }
 
     private async addWeatherData(req: Request, res: Response): Promise<void> {
+        console.log(req.body);
         const { temperature, humidity, timestamp } = req.body;
 
         await this.database.addWeatherData(temperature, humidity, timestamp);
@@ -80,9 +81,6 @@ export default class Api {
     }
 
     private async getWeatherData(req: Request, res: Response): Promise<void> {
-        //check method
-        console.log(req.method);
-
         const weatherData = await this.database.getWeatherData();
 
         res.json(weatherData);
