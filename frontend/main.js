@@ -52,7 +52,7 @@ mtlLoader.load('/arduino-nano.mtl', (materials) => {
     materials.preload();
     objLoader.setMaterials(materials);
     objLoader.load('/arduino-nano.obj', (object) => {
-        object.position.set(positions.arduino.x, positions.arduino.y, positions.arduino.z);
+        object.position.set(positions.arduino.x, positions.arduino.y + 1, positions.arduino.z);
         object.scale.set(0.5, 0.5, 0.5);
         scene.add(object);
     });
