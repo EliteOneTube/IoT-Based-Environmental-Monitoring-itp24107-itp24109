@@ -140,7 +140,7 @@ socket.on('weather', (data) => {
     document.getElementById('temperature').textContent = data.temperature.toFixed(2);  // Assuming data contains temperature
     document.getElementById('humidity').textContent = data.humidity.toFixed(2);  // Assuming data contains humidity
 
-    const timestamp = new Date(data.timestamp);  // Create a Date object from the timestamp
+    const timestamp = new Date(data.timestamp * 1000);  // Create a Date object from the timestamp
     const timeTaken = timestamp.toLocaleString();  // Convert the Date object to a human-readable string
     document.getElementById('timeTaken').textContent = timeTaken;
 });
