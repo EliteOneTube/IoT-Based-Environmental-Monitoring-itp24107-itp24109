@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import io from 'socket.io-client'; // Import socket.io-client
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // Scene, Camera, Renderer
 const scene = new THREE.Scene();
@@ -10,6 +11,8 @@ const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls( camera, renderer.domElement );
 
 // Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -35,7 +38,12 @@ const positions = {
 gltfLoader.load('/dht22_temperature_sensor_module_gltf/scene.gltf', (gltf) => {
     const sensor = gltf.scene;
     sensor.position.set(positions.sensor.x, positions.sensor.y, positions.sensor.z);
-    sensor.scale.set(20, 20, 20);  // Scale down if needed
+    sensor.scale.set(20, 20, 20);  
+
+    sensor.rotation.x = Math.PI;  // Rotate the server rack to make it stand upright
+    sensor.rotation.y = Math.PI / 2;  // Rotate the server rack to make it stand upright
+
+
     scene.add(sensor);
 });
 
@@ -44,7 +52,7 @@ mtlLoader.load('/arduino-nano.mtl', (materials) => {
     materials.preload();
     objLoader.setMaterials(materials);
     objLoader.load('/arduino-nano.obj', (object) => {
-        object.position.set(positions.arduino.x, positions.arduino.y + 1, positions.arduino.z);
+        object.position.set(positions.arduino.x, positions.arduino.y, positions.arduino.z);
         object.scale.set(0.5, 0.5, 0.5);
         scene.add(object);
     });
@@ -58,7 +66,7 @@ gltfLoader.load('/server_rack_gltf/scene.gltf', (gltf) => {
     
     server.scale.set(0.5, 0.5, 0.5);
 
-    server.rotation.x = Math.PI / 2;
+    server.rotation.x = Math.PI / 2;  // Rotate the server rack to make it stand upright
 
     scene.add(server);
 });
@@ -101,7 +109,7 @@ camera.lookAt(0, 0, 0);
 // Initialize Socket.io Client
 const socket = io('https://weathernest.mooo.com/api', {
     path: '/socket',
-});  // Replace with your server URL
+});
 
 // Listen for incoming data from the backend
 socket.on('weather', (data) => {
