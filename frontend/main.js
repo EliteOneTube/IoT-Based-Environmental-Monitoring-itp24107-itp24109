@@ -121,7 +121,7 @@ dataBox.innerHTML = `
     <h3>Sensor Data</h3>
     <p>Temperature: <span id="temperature">--</span>°C</p>
     <p>Humidity: <span id="humidity">--</span>%</p>
-    <p>Time Taken: <span id="timeTaken">--</span> ms</p>
+    <p>Time Taken: <span id="timeTaken">--</span></p>
 `;
 
 // Append to body
@@ -134,8 +134,6 @@ const socket = io('https://weathernest.mooo.com', {
 
 // Listen for incoming data from the backend
 socket.on('weather', (data) => {
-    console.log('Received sensor data:', data);
-
     // Update the temperature, humidity, and time taken in the box
     document.getElementById('temperature').textContent = data.temperature.toFixed(2);  // Assuming data contains temperature
     document.getElementById('humidity').textContent = data.humidity.toFixed(2);  // Assuming data contains humidity
@@ -143,6 +141,12 @@ socket.on('weather', (data) => {
     const timestamp = new Date(data.timestamp * 1000);  // Create a Date object from the timestamp
     const timeTaken = timestamp.toLocaleString();  // Convert the Date object to a human-readable string
     document.getElementById('timeTaken').textContent = timeTaken;
+
+    // Set the position of the data ball to the sensor's position
+    dataBall.position.set(positions.sensor.x, positions.sensor.y, positions.sensor.z);
+
+    // Set the flag to true to start the animation
+    dataReceived = true;
 });
 
 // Animate the "data ball"
