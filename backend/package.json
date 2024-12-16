@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc -p .",
     "node": "node dist/app.js",
-    "pm2": "pm2 start dist/app.js --name iot-backend"
+    "pm2": "pm2 start dist/app.js --name iot-backend",
+    "pm2_restart": "pm2 restart iot-backend"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
@@ -20,6 +21,7 @@
     "express": "^4.21.1",
     "mongoose": "^8.8.1",
     "mqtt": "^5.10.1",
+    "socket.io": "^4.8.1",
     "swagger-ui-express": "^5.0.1"
   }
 }

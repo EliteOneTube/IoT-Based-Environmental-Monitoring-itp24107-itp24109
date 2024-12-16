@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Database from './Database';
 import swaggerUi from 'swagger-ui-express';
+import Server from './Server';
 
 export default class Api {
     public express: express.Application;
@@ -9,17 +10,17 @@ export default class Api {
 
     private swaggerDocument = require('../../swagger.json');
 
+    private server: Server;
+
     constructor(database: Database) {
         this.express = express();
         this.mountRoutes();
 
-        const port = process.env.API_PORT || 3000;
+        const port = Number(process.env.API_PORT) || 3000;
 
         this.database = database;
 
-        this.express.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        });
+        this.server = new Server(this.express, port);
     }
 
     private async authenticateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -58,6 +59,8 @@ export default class Api {
         const { temperature, humidity, timestamp } = req.body;
 
         await this.database.addWeatherData(temperature, humidity, timestamp);
+
+        this.server.broadcast('weather', { temperature, humidity, timestamp });
 
         res.json({
             message: 'Weather data saved'
