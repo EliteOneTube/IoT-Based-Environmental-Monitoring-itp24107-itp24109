@@ -1,15 +1,16 @@
 import { createServer } from 'http';
-import { Server as SocketIOServer, Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
+import { Express } from 'express';
 
-class Server {
-    private io: SocketIOServer;
+class WebSocketServer {
+    private io;
 
-    constructor(app: Express.Application, port: number) {
+    constructor(app: Express, port: number) {
         const server = createServer(app).listen(port, () =>
             console.log(`App listening on PORT ${port}`)
         );
 
-        this.io = new SocketIOServer(server, {
+        this.io = new Server(server, {
             cors: {
                 origin: '*',
                 methods: ['GET', 'POST'],
@@ -35,4 +36,4 @@ class Server {
     }
 }
 
-export default Server;
+export default WebSocketServer;

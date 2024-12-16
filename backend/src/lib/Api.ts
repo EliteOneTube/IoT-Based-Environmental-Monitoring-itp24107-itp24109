@@ -1,16 +1,16 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Database from './Database';
 import swaggerUi from 'swagger-ui-express';
-import Server from './Server';
+import WebSocketServer from './WebSocketServer';
 
 export default class Api {
-    public express: express.Application;
+    public express: express.Express;
 
     private database: Database;
 
     private swaggerDocument = require('../../swagger.json');
 
-    private server: Server;
+    private server: WebSocketServer;
 
     constructor(database: Database) {
         this.express = express();
@@ -20,7 +20,7 @@ export default class Api {
 
         this.database = database;
 
-        this.server = new Server(this.express, port);
+        this.server = new WebSocketServer(this.express, port);
     }
 
     private async authenticateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
