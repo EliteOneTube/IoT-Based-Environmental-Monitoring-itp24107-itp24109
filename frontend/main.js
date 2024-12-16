@@ -106,6 +106,27 @@ let dataReceived = false;  // A flag to control the animation
 camera.position.set(0, 10, 0);
 camera.lookAt(0, 0, 0);
 
+const dataBox = document.createElement('div');
+dataBox.style.position = 'absolute';
+dataBox.style.top = '10px';
+dataBox.style.right = '10px';
+dataBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+dataBox.style.color = 'white';
+dataBox.style.padding = '10px';
+dataBox.style.borderRadius = '8px';
+dataBox.style.fontSize = '14px';
+dataBox.style.fontFamily = 'Arial, sans-serif';
+dataBox.style.maxWidth = '250px';
+dataBox.innerHTML = `
+    <h3>Sensor Data</h3>
+    <p>Temperature: <span id="temperature">--</span>°C</p>
+    <p>Humidity: <span id="humidity">--</span>%</p>
+    <p>Time Taken: <span id="timeTaken">--</span> ms</p>
+`;
+
+// Append to body
+document.body.appendChild(dataBox);
+
 // Initialize Socket.io Client
 const socket = io('https://weathernest.mooo.com/api', {
     path: '/socket',
@@ -115,10 +136,13 @@ const socket = io('https://weathernest.mooo.com/api', {
 socket.on('weather', (data) => {
     console.log('Received sensor data:', data);
 
-    // Assuming the data contains a temperature or humidity value, we can use this to animate the ball
-    const tTarget = data.temperature / 100;  // Normalize the data to control animation speed
-    t = 0; // Reset animation
-    dataReceived = true;  // Set the flag to true when new data is received
+    // Update the temperature, humidity, and time taken in the box
+    document.getElementById('temperature').textContent = data.temperature.toFixed(2);  // Assuming data contains temperature
+    document.getElementById('humidity').textContent = data.humidity.toFixed(2);  // Assuming data contains humidity
+
+    const timestamp = new Date(data.timestamp);  // Create a Date object from the timestamp
+    const timeTaken = timestamp.toLocaleString();  // Convert the Date object to a human-readable string
+    document.getElementById('timeTaken').textContent = timeTaken;
 });
 
 // Animate the "data ball"
