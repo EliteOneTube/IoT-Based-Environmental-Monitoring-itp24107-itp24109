@@ -12,7 +12,7 @@ class WebSocketServer {
 
         this.io = new Server(server, {
             cors: {
-                origin: '*',
+                origin: ['http://localhost:4000/', 'https://weathernest.mooo.com/'],
                 methods: ['GET', 'POST'],
             },
             path: '/socket',
