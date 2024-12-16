@@ -128,7 +128,7 @@ dataBox.innerHTML = `
 document.body.appendChild(dataBox);
 
 // Initialize Socket.io Client
-const socket = io('https://weathernest.mooo.com/api', {
+const socket = io('https://weathernest.mooo.com', {
     path: '/socket',
 });
 
