@@ -105,7 +105,7 @@ let t = 0;
 let dataReceived = false;  // A flag to control the animation
 
 // Camera Position
-camera.position.set(0, 10, 0);
+camera.position.set(0, 7, 0);
 camera.lookAt(0, 0, 0);
 
 const dataBox = document.createElement('div');
@@ -116,17 +116,17 @@ dataBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
 dataBox.style.color = 'white';
 dataBox.style.padding = '10px';
 dataBox.style.borderRadius = '8px';
-dataBox.style.fontSize = '14px';
+dataBox.style.fontSize = '12px'; // Smaller font size for better fit
 dataBox.style.fontFamily = 'Arial, sans-serif';
-dataBox.style.maxWidth = '250px';
+dataBox.style.maxWidth = '90%'; // Adjust width to fit smaller screens
+dataBox.style.boxSizing = 'border-box'; // Ensure padding doesn’t overflow
 dataBox.innerHTML = `
-    <h3>Sensor Data</h3>
-    <p>Temperature: <span id="temperature">--</span>°C</p>
-    <p>Humidity: <span id="humidity">--</span>%</p>
-    <p>Time Taken: <span id="timeTaken">--</span></p>
+    <h3 style="margin: 0 0 10px;">Sensor Data</h3>
+    <p style="margin: 5px 0;">Temperature: <span id="temperature">--</span>°C</p>
+    <p style="margin: 5px 0;">Humidity: <span id="humidity">--</span>%</p>
+    <p style="margin: 5px 0;">Time Taken: <span id="timeTaken">--</span></p>
 `;
 
-// Append to body
 document.body.appendChild(dataBox);
 
 // Initialize Socket.io Client
@@ -198,16 +198,99 @@ creditsDiv.style.position = 'absolute';
 creditsDiv.style.bottom = '10px';
 creditsDiv.style.left = '10px';
 creditsDiv.style.color = 'white';
-creditsDiv.style.fontSize = '14px';
+creditsDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+creditsDiv.style.padding = '10px';
+creditsDiv.style.borderRadius = '8px';
+creditsDiv.style.fontSize = '12px'; // Adjust font size for mobile screens
 creditsDiv.style.fontFamily = 'Arial, sans-serif';
+creditsDiv.style.maxWidth = '90%'; // Make it fit smaller screens
+creditsDiv.style.boxSizing = 'border-box';
+creditsDiv.style.overflowWrap = 'break-word'; // Prevent long text from overflowing
 creditsDiv.innerHTML = `
-    <p><strong>Credits:</strong></p>
-    <ul>
-        <li>DHT22 Sensor Model: <a href="https://skfb.ly/oApBP" target="_blank" style="color: white;">Link to Source</a></li>
-        <li>Processor Model: <a href="https://free3d.com/3d-model/arduino-nano-low-poly-705977.html" target="_blank" style="color: white;">Link to Source</a></li>
-        <li>Server Rack Model: <a href="https://skfb.ly/6SARA" target="_blank" style="color: white;">Link to Source</a></li>
+    <p style="margin: 0; font-weight: bold;">Project Links & Credits:</p>
+    <ul style="list-style-type: none; padding-left: 0; margin: 10px 0;">
+        <li style="margin-bottom: 5px;">
+            <a href="https://github.com/EliteOneTube/IoT-Based-Environmental-Monitoring-itp24107-itp24109" 
+               target="_blank" 
+               style="color: #00aaff; text-decoration: none;">
+                <strong>GitHub Repository</strong>
+            </a>
+        </li>
+        <li style="margin-bottom: 5px;">
+            <a href="https://itp24109.grafana.net/public-dashboards/0e9c0df32e8b4d7c9a712b16e2902512" 
+               target="_blank" 
+               style="color: #00aaff; text-decoration: none;">
+                <strong>Grafana Dashboard</strong>
+            </a>
+        </li>
+    </ul>
+    <p style="margin: 0; font-weight: bold;">Credits:</p>
+    <ul style="list-style-type: none; padding-left: 0; margin: 10px 0;">
+        <li style="margin-bottom: 5px;">
+            DHT22 Sensor Model: 
+            <a href="https://skfb.ly/oApBP" 
+               target="_blank" 
+               style="color: #00aaff; text-decoration: none;">
+                Link to Source
+            </a>
+        </li>
+        <li style="margin-bottom: 5px;">
+            Processor Model: 
+            <a href="https://free3d.com/3d-model/arduino-nano-low-poly-705977.html" 
+               target="_blank" 
+               style="color: #00aaff; text-decoration: none;">
+                Link to Source
+            </a>
+        </li>
+        <li style="margin-bottom: 5px;">
+            Server Rack Model: 
+            <a href="https://skfb.ly/6SARA" 
+               target="_blank" 
+               style="color: #00aaff; text-decoration: none;">
+                Link to Source
+            </a>
+        </li>
     </ul>
 `;
 
-// Add the credits div to the body
 document.body.appendChild(creditsDiv);
+
+// Detect screen size and adjust layout
+function adjustLayout() {
+    if (window.innerWidth < 768) { // For phones
+        // Vertical layout
+        positions.sensor = { x: 0, y: 5, z: 0 };
+        positions.arduino = { x: 0, y: 0, z: 0 };
+        positions.server = { x: 0, y: -5, z: 0 };
+
+        // Adjust camera
+        camera.position.set(0, 0, 10); // Move camera back to fit vertical layout
+        camera.lookAt(0, 0, 0);
+    } else {
+        // Default horizontal layout for larger screens
+        positions.sensor = { x: -5, y: 0, z: 0 };
+        positions.arduino = { x: 0, y: 0, z: 0 };
+        positions.server = { x: 5, y: 0, z: 0 };
+
+        // Adjust camera
+        camera.position.set(0, 7, 0); // Move camera for horizontal layout
+        camera.lookAt(0, 0, 0);
+    }
+
+    // Update line positions
+    lineGeometry1.setFromPoints([
+        new THREE.Vector3(positions.sensor.x, positions.sensor.y, positions.sensor.z),
+        new THREE.Vector3(positions.arduino.x, positions.arduino.y, positions.arduino.z)
+    ]);
+    lineGeometry2.setFromPoints([
+        new THREE.Vector3(positions.arduino.x, positions.arduino.y, positions.arduino.z),
+        new THREE.Vector3(positions.server.x, positions.server.y, positions.server.z)
+    ]);
+
+    // Reposition data ball
+    dataBall.position.set(positions.sensor.x, positions.sensor.y, positions.sensor.z);
+}
+
+// Call adjustLayout initially and on window resize
+adjustLayout();
+window.addEventListener('resize', adjustLayout);
