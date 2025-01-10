@@ -145,7 +145,7 @@ socket.on('weather', (data) => {
     document.getElementById('timeTaken').textContent = timeTaken;
 
     // Update the data ball's color based on conditions
-    if (data.temperature < 20 && data.humidity > 60) {
+    if (data.temperature < 20 || data.humidity > 60) {
         dataBall.material.color.set(0xff0000); // Red
     } else {
         dataBall.material.color.set(0x00ff00); // Green
