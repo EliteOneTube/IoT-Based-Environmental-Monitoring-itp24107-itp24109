@@ -88,12 +88,14 @@ const line2 = new THREE.Line(lineGeometry2, lineMaterial);
 scene.add(line2);
 
 // Create a "data ball"
-const dataMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const dataMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00  });
 const dataGeometry = new THREE.SphereGeometry(0.1, 16, 16);
 const dataBall = new THREE.Mesh(dataGeometry, dataMaterial);
 
 // Set initial position of the data ball to the sensor's position
 dataBall.position.set(positions.sensor.x, positions.sensor.y, positions.sensor.z);
+
+dataBall.visible = false;
 
 // Add data ball to scene
 scene.add(dataBall);
@@ -135,14 +137,22 @@ const socket = io('https://weathernest.mooo.com', {
 // Listen for incoming data from the backend
 socket.on('weather', (data) => {
     // Update the temperature, humidity, and time taken in the box
-    document.getElementById('temperature').textContent = data.temperature.toFixed(2);  // Assuming data contains temperature
-    document.getElementById('humidity').textContent = data.humidity.toFixed(2);  // Assuming data contains humidity
+    document.getElementById('temperature').textContent = data.temperature.toFixed(2); // Assuming data contains temperature
+    document.getElementById('humidity').textContent = data.humidity.toFixed(2); // Assuming data contains humidity
 
-    const timestamp = new Date(data.timestamp * 1000);  // Create a Date object from the timestamp
-    const timeTaken = timestamp.toLocaleString();  // Convert the Date object to a human-readable string
+    const timestamp = new Date(data.timestamp * 1000); // Create a Date object from the timestamp
+    const timeTaken = timestamp.toLocaleString(); // Convert the Date object to a human-readable string
     document.getElementById('timeTaken').textContent = timeTaken;
 
-    // Set the position of the data ball to the sensor's position
+    // Update the data ball's color based on conditions
+    if (data.temperature < 20 && data.humidity > 60) {
+        dataBall.material.color.set(0xff0000); // Red
+    } else {
+        dataBall.material.color.set(0x00ff00); // Green
+    }
+
+    // Show the "data ball" and set its position to the sensor's position
+    dataBall.visible = true;
     dataBall.position.set(positions.sensor.x, positions.sensor.y, positions.sensor.z);
 
     // Set the flag to true to start the animation
@@ -152,7 +162,7 @@ socket.on('weather', (data) => {
 // Animate the "data ball"
 function animateDataBall() {
     if (dataReceived) {
-        t += 0.005;  // Increment the animation
+        t += 0.005; // Increment the animation
 
         if (t <= 1) {
             // Move the ball from sensor to server based on received data
@@ -166,6 +176,9 @@ function animateDataBall() {
             dataReceived = false;
             t = 0; // Reset the animation
             dataBall.position.set(positions.sensor.x, positions.sensor.y, positions.sensor.z);
+
+            // Hide the "data ball" again until new data is received
+            dataBall.visible = false;
         }
     }
 }
