@@ -112,21 +112,23 @@ const dataBox = document.createElement('div');
 dataBox.style.position = 'absolute';
 dataBox.style.top = '10px';
 dataBox.style.right = '10px';
-dataBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+dataBox.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'; // Darker background
 dataBox.style.color = 'white';
-dataBox.style.padding = '10px';
-dataBox.style.borderRadius = '8px';
-dataBox.style.fontSize = '12px'; // Smaller font size for better fit
+dataBox.style.padding = '20px'; // Increased padding for card effect
+dataBox.style.borderRadius = '12px'; // Rounded corners
+dataBox.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)'; // Card shadow
 dataBox.style.fontFamily = 'Arial, sans-serif';
-dataBox.style.maxWidth = '90%'; // Adjust width to fit smaller screens
-dataBox.style.boxSizing = 'border-box'; // Ensure padding doesn’t overflow
+dataBox.style.maxWidth = '300px';
+dataBox.style.fontSize = '16px'; // Larger text
+
 dataBox.innerHTML = `
-    <h3 style="margin: 0 0 10px;">Sensor Data</h3>
+    <h3 style="font-size: 20px; margin: 0 0 10px; text-align: center;">Sensor Data</h3>
     <p style="margin: 5px 0;">Temperature: <span id="temperature">--</span>°C</p>
     <p style="margin: 5px 0;">Humidity: <span id="humidity">--</span>%</p>
     <p style="margin: 5px 0;">Time Taken: <span id="timeTaken">--</span></p>
 `;
 
+// Append to body
 document.body.appendChild(dataBox);
 
 // Initialize Socket.io Client
@@ -201,7 +203,7 @@ creditsDiv.style.color = 'white';
 creditsDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
 creditsDiv.style.padding = '10px';
 creditsDiv.style.borderRadius = '8px';
-creditsDiv.style.fontSize = '12px'; // Adjust font size for mobile screens
+creditsDiv.style.fontSize = '16px'; // Adjust font size for mobile screens
 creditsDiv.style.fontFamily = 'Arial, sans-serif';
 creditsDiv.style.maxWidth = '90%'; // Make it fit smaller screens
 creditsDiv.style.boxSizing = 'border-box';
@@ -255,29 +257,27 @@ creditsDiv.innerHTML = `
 
 document.body.appendChild(creditsDiv);
 
-// Detect screen size and adjust layout
+// Detect screen size and adjust layout// Detect screen size and adjust layout
 function adjustLayout() {
-    if (window.innerWidth < 768) { // For phones
-        // Vertical layout
-        positions.sensor = { x: 0, y: 5, z: 0 };
+    if (window.innerWidth < 1000) { // For phones
+        // Vertical layout with smaller spacing
+        positions.sensor = { x: 0, y: 2, z: 0 };
         positions.arduino = { x: 0, y: 0, z: 0 };
-        positions.server = { x: 0, y: -5, z: 0 };
+        positions.server = { x: 0, y: -2, z: 0 };
 
         // Adjust camera
         camera.position.set(0, 0, 10); // Move camera back to fit vertical layout
         camera.lookAt(0, 0, 0);
-    } else {
-        // Default horizontal layout for larger screens
-        positions.sensor = { x: -5, y: 0, z: 0 };
-        positions.arduino = { x: 0, y: 0, z: 0 };
-        positions.server = { x: 5, y: 0, z: 0 };
 
-        // Adjust camera
-        camera.position.set(0, 7, 0); // Move camera for horizontal layout
-        camera.lookAt(0, 0, 0);
+        // Scale down models for smaller screens
+        scene.traverse((child) => {
+            if (child.isMesh || child.isGroup) {
+                child.scale.set(0.5, 0.5, 0.5); // Scale down to 50%
+            }
+        });
     }
 
-    // Update line positions
+    // Update line positions with new spacing
     lineGeometry1.setFromPoints([
         new THREE.Vector3(positions.sensor.x, positions.sensor.y, positions.sensor.z),
         new THREE.Vector3(positions.arduino.x, positions.arduino.y, positions.arduino.z)
