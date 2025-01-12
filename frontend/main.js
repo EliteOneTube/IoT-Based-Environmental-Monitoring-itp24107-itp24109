@@ -3,7 +3,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import io from 'socket.io-client'; // Import socket.io-client
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // Scene, Camera, Renderer
 const scene = new THREE.Scene();
@@ -12,7 +11,6 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const controls = new OrbitControls( camera, renderer.domElement );
 
 // Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -21,6 +19,9 @@ scene.add(ambientLight);
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
 directionalLight.position.set(0, 10, 10);
 scene.add(directionalLight);
+
+// Set background color to gray
+scene.background = new THREE.Color(0x808080); // Gray color in hexadecimal
 
 // Loaders
 const gltfLoader = new GLTFLoader();
